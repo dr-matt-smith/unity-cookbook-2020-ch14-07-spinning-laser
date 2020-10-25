@@ -10,25 +10,32 @@ public class LaserDisplay : MonoBehaviour
     
     private LineRenderer _lineRenderer;
     
+    Vector3 lineStart;
+
     void Awake()
     {
         _lineRenderer = gameObject.AddComponent<LineRenderer>();
         _lineRenderer.material = material;
         _lineRenderer.positionCount = 2;
-        _lineRenderer.startWidth = lineWidth;
+        _lineRenderer.startWidth = lineWidth; _lineRenderer.material.SetColor("_Color", color);
+        lineStart = transform.position;
+        _lineRenderer.SetPosition(0, lineStart);
+        drawLaser();
     }
 
-    void Update () 
+    void Update()
     {
-        _lineRenderer.material.SetColor("_Color", color);
-        
+        if(rotationSpeed != 0)
+        {
+            drawLaser();
+        }
+    }
+
+    private void drawLaser()
+    {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 lineStart = transform.position;
-        Vector3 lineEnd =  transform.position + forward * lineLength; 
-        
-        _lineRenderer.SetPosition(0, lineStart);
+        Vector3 lineEnd = transform.position + forward * lineLength;
         _lineRenderer.SetPosition(1, lineEnd);
-        
-        transform.Rotate(0, rotationSpeed, 0);    
+        transform.Rotate(0, rotationSpeed, 0);
     }
 }
